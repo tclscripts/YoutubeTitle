@@ -4,7 +4,7 @@
 # - displays title, date and rating of posted video links. 
 # - supports also HTTPS links.
 #
-# requires: packages http 
+# requires: package http 
 #
 # UPDATES/CHANGES:
 # - Now with multiple output methods of showing the infos configurable via channel
