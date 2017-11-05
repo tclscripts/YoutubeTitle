@@ -43,8 +43,8 @@ bind ctcp - ACTION check:youtube:me
 # - to change script language:
 # .set ytlang <ro/en/fr/es/it> or .chanset #channel ytlang <ro/en/fr/es/it>
 #
-# - to set script color
-# .set ytcolor <0/1> ; 1 - colors ; 0 - no colors
+# - to set script color:
+# .set ytcolor <0/1> (1 - colors ; 0 - no colors)
 #
 ###
 
