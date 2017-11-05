@@ -47,7 +47,6 @@ bind ctcp - ACTION check:youtube:me
 # .set ytcolor <0/1> (1 - colors ; 0 - no colors)
 #
 ###
-
 setudef flag ytitle
 setudef str ytlang
 setudef str ytcolor
@@ -129,7 +128,6 @@ if {$novideo == "1"} {
 
 }
 
-
 proc youtube:tell {nick chan arg} {
 	global black ytitle
 	set arg_s [split $arg "~"]
@@ -191,7 +189,7 @@ set ytitle(author) "BLaCkShaDoW"
 set ytitle(website) "wWw.TCLScriptS.NeT"
 set ytitle(version) "v1.6"
 
-#Languages
+# Languages
 
 # Romanian
 
