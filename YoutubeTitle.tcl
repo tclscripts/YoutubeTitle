@@ -9,6 +9,7 @@
 # UPDATES/CHANGES:
 # - Now with multiple output methods of showing the infos configurable via channel
 # - Now with multi-language support configurable via channel
+# - Fixed entity decoding problems in return titles
 # - Now supports eggdrop version less than 1.8.*
 # - All options/settings are now case sensitive
 #
