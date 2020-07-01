@@ -1,12 +1,14 @@
 ##########################################################################################
-# Youtube Title 2.0
+# Youtube Title 2.2
 # - fetches and displays video information when a YouTube link is posted in channel.
-# - displays title, date and rating of posted video links. 
+# - displays title, date and rating of posted video links.
 # - supports also HTTPS links.
 #
-# requires: packages http, tls 
+# requires: packages http, tls
 #
 # UPDATES/CHANGES:
+# - (2.2) solved issues related to youtube changes
+# - (2.1) solved issue with youtube live videos
 # - (2.0) now the script access directly Youtube
 # - (1.9) added stars for like display instead of procentages
 # - (1.8) added anti-flood support
@@ -27,12 +29,12 @@
 # To work put the http.tcl, from the archive, in your eggdrop config (if you don't have it instaled)
 #
 #                       BLaCkShaDoW ProductionS
-#      _   _   _   _   _   _   _   _   _   _   _   _   _   _  
-#     / \ / \ / \ / \ / \ / \ / \ / \ / \ / \ / \ / \ / \ / \ 
+#      _   _   _   _   _   _   _   _   _   _   _   _   _   _
+#     / \ / \ / \ / \ / \ / \ / \ / \ / \ / \ / \ / \ / \ / \
 #    ( t | c | l | s | c | r | i | p | t | s | . | n | e | t )
 #     \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/ \_/
 #                                    #TCL-HELP @ Undernet.org
-#     
+#
 ##########################################################################################
 
 ###
@@ -139,18 +141,19 @@ proc tls:socket args {
    set port [lindex $args end]
    ::tls::socket -servername $host {*}$opts $host $port
 }
- 
+
 
 
 ###
 proc ytitle:get_idsearch {arg} {
 	global ytitle
 	set text [join $arg "+"]
-	set url "https://www.youtube.com/results?search_query=$text"
+	set search_query [::http::formatQuery search_query $text]
+	set url "https://www.youtube.com/results?$search_query"
 	set id "-1"
 	http::register https 443 tls::socket
 	set ipq [http::config -useragent "lynx"]
-	set ipq [::http::geturl "$url" -timeout 10000] 
+	set ipq [::http::geturl "$url" -timeout 30000]
 	set status [http::status $ipq]
 if {$status != "ok"} {
 	::http::cleanup $ipq
@@ -158,6 +161,9 @@ if {$status != "ok"} {
 }
 	set data [http::data $ipq]
 	regexp {<li><div class="yt-lockup yt-lockup-tile yt-lockup-video vve-check clearfix" data-context-item-id="(.*)"} $data -> id
+if {$id == -1} {
+	regexp {\[\{\"videoRenderer\"\:\{\"videoId\"\:\"(.*?)\"} $data -> id
+}
 if {$id == "-1"} {
 	return 0
 }
@@ -176,7 +182,7 @@ if {![info exists id]} {
 	set short_url "https://youtu.be/$id"
 	http::register https 443 tls::socket
 	set ipq [http::config -useragent "lynx"]
-	set ipq [::http::geturl "$url" -timeout 10000] 
+	set ipq [::http::geturl "$url" -timeout 30000]
 	set status [http::status $ipq]
 if {$status != "ok"} {
 	::http::cleanup $ipq
@@ -190,22 +196,38 @@ if {$status != "ok"} {
 	set likes ""
 	set dislikes ""
 	set bywho ""
+	set duration ""
+	set tools ""
+	set type 0
 foreach line $data {
 	regexp {"name": "(.*)"} $line -> bywho
 	regexp {<span id="eow-title" class="watch-title" dir="ltr" title="(.*)">} $line -> title
+if {$title == ""} {
+	regexp {<meta name="title" content="(.*)">} $line -> title
+}
 	regexp {<meta itemprop="datePublished" content="(.*)">} $line -> date
 	regexp {<div class="watch-view-count">(.*)</div>} $line -> view_count
+if {$view_count == ""} {
+	regexp {\"viewCount\":\{\"simpleText\":\"(.*?)\"\}} $line -> view_count
+	regexp {\"likeStatus\":\"INDIFFERENT\"\,\"tooltip\"\:\"(.*?)\"\}\}} $line -> tools
+if {$tools != ""} {
+	set type 1
+}
+	set split_tools [split $tools "/"]
+	set likes [string map {"." ""} [concat [lindex $split_tools 0]]]
+	set dislikes [string map {"." ""} [concat [lindex $split_tools 1]]]
+} else {
 	regexp {<div class="video-extras-sparkbar-likes" style="width:(.*)"></div>} $line -> likes
 	regexp {div class="video-extras-sparkbar-dislikes" style="width:(.*)"><\/div>} $line -> dislikes
-	regexp {<meta itemprop="duration" content="(.*)">} $line -> duration
-}
 	set likes [concat $likes]
 	set dislikes [concat $dislikes]
 	set view_count [lindex [split $view_count " "] 0]
+}
+	regexp {<meta itemprop="duration" content="(.*)">} $line -> duration
+}
 	::http::cleanup $ipq
 	return [list $title $view_count $likes $dislikes $bywho $date $duration $short_url $link_counter]
 }
-
 
 ###
 proc search:youtube {nick host hand chan arg} {
@@ -228,7 +250,7 @@ if {$get_id == "-1"} {
 	set url "https://www.youtube.com/watch?v=$get_id"
 	youtube:get:title $url $nick $chan 1
 	}
-} 
+}
 
 ###
 proc check:youtube {nick host hand chan arg} {
@@ -314,7 +336,7 @@ if {$setcolor == "1"} {
 if {[info exists black(ytitle.$getlang.$type)]} {
 	set reply [string map [array get replace] $black(ytitle.$getlang.$type)]
 	putserv "PRIVMSG $chan :$reply"
-		}	
+		}
 	}
 }
 
@@ -327,7 +349,7 @@ if {$getlang == ""} {
 } else {
 if {[info exists black(ytitle.$getlang.1)]} {
 	set lang $getlang
-} else { 
+} else {
 	set lang $ytitle(default_lang)
 		}
 	}
@@ -365,11 +387,11 @@ if {[string match "*youtube:remove:flood $host $chan*" [join [lindex $tmr 1]]]} 
 	killutimer [lindex $tmr 2]
 	}
 }
-if {![info exists ytitle(flood:$host:$chan)]} { 
-	set ytitle(flood:$host:$chan) 0 
+if {![info exists ytitle(flood:$host:$chan)]} {
+	set ytitle(flood:$host:$chan) 0
 }
 	incr ytitle(flood:$host:$chan)
-	utimer $timer [list youtube:remove:flood $host $chan]	
+	utimer $timer [list youtube:remove:flood $host $chan]
 if {$ytitle(flood:$host:$chan) > $number} {
 	set ytitle(flood:$host:$chan:act) 1
 	utimer [expr $ytitle(ignore_prot) * 60] [list youtube:expire:flood $host $chan]
@@ -399,7 +421,7 @@ if {[info exists ytitle(flood:$host:$chan:act)]} {
 set ytitle(projectName) "Youtube Title"
 set ytitle(author) "BLaCkShaDoW"
 set ytitle(website) "wWw.TCLScriptS.NeT"
-set ytitle(version) "v2.0"
+set ytitle(version) "v2.2"
 
 ###
 proc youtube:like_bar {like dislike chan} {
