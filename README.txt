@@ -1,5 +1,5 @@
 ##########################################################################################
-# Youtube Title 1.6
+# Youtube Title 2.2
 # - fetches and displays video information when a YouTube link is posted in channel.
 # - displays title, date and rating of posted video links. 
 # - supports also HTTPS links.
@@ -7,11 +7,19 @@
 # requires: packages http 
 #
 # UPDATES/CHANGES:
-# - Now with multiple output methods of showing the infos configurable via channel
-# - Now with multi-language support configurable via channel
-# - Fixed entity decoding problems in return titles
-# - Now supports eggdrop version less than 1.8.*
-# - All options/settings are now case sensitive
+# - (2.2) solved issues related to youtube changes
+# - (2.1) solved issue with youtube live videos
+# - (2.0) now the script access directly Youtube
+# - (1.9) added stars for like display instead of procentages
+# - (1.8) added anti-flood support
+# - (1.8) added youtube search (it will get info from the first youtube video)
+# - (1.8) added support for music.youtube links
+# - (1.8) shows total links/searches processed by the website
+# - (1.7) shows info about duration/length
+# - (1.6) multiple output methods of showing the infos configurable via channel
+# - (1.6) multi-language support configurable via channel
+# - (1.6) supports eggdrop version less than 1.8.*
+# - (1.6) options/settings are now case sensitive
 #
 # To activate .chanset #channel +ytitle | BlackTools : .set +ytitle
 #
@@ -21,7 +29,7 @@
 #
 # To work put the http.tcl, from the archive, in your eggdrop config (if you don't have it instaled)
 #
-#                       BLaCkShaDoW ProductionS
+#                       BLaCkShaDoW Production
 #      _   _   _   _   _   _   _   _   _   _   _   _   _   _  
 #     / \ / \ / \ / \ / \ / \ / \ / \ / \ / \ / \ / \ / \ / \ 
 #    ( t | c | l | s | c | r | i | p | t | s | . | n | e | t )
