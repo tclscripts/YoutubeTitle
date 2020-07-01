@@ -7,7 +7,7 @@
 # requires: packages http, tls
 #
 # UPDATES/CHANGES:
-# - (2.2) added germain language
+# - (2.2) added german language
 # - (2.2) solved some little bugs
 # - (2.2) solved issues related to youtube changes
 # - (2.1) solved issue with youtube live videos
