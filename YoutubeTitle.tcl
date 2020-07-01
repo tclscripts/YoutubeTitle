@@ -420,9 +420,14 @@ set ytitle(version) "v2.2"
 
 ###
 proc youtube:percentage {total number} {
+	if {$number == 0} { return 0}
   if {$total > 0} {
+	if {$total > 100} {
    return [expr $number / [expr $total / 100]];
-  } else {
+ } else {
+	 return [expr $number / [expr 100 / $total]];
+ 				}
+  		} else {
     return 0;
   }
 }
