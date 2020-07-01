@@ -7,6 +7,8 @@
 # requires: packages http, tls
 #
 # UPDATES/CHANGES:
+# - (2.2) added germain language
+# - (2.2) solved some little bugs
 # - (2.2) solved issues related to youtube changes
 # - (2.1) solved issue with youtube live videos
 # - (2.0) now the script access directly Youtube
@@ -79,9 +81,9 @@ set ytitle(flood_prot) "3:10"
 ###
 # Language setting
 # - what language you want to receive the youTube data
-#   ( RO / EN / ES / FR / IT )
+#   ( RO / EN / ES / FR / IT / DE )
 #
-set ytitle(default_lang) "RO"
+set ytitle(default_lang) "DE"
 
 ###
 # Colors setting
@@ -142,8 +144,6 @@ proc tls:socket args {
    ::tls::socket -servername $host {*}$opts $host $port
 }
 
-
-
 ###
 proc ytitle:get_idsearch {arg} {
 	global ytitle
@@ -169,7 +169,6 @@ if {$id == "-1"} {
 }
 	return [string map {"\"" ""} [lindex [split $id] 0]]
 }
-
 
 ###
 proc ytitle:data {link} {
@@ -345,14 +344,10 @@ proc youtube:getlang {chan} {
 	global black ytitle
 	set getlang [string tolower [channel get $chan ytlang]]
 if {$getlang == ""} {
-	set lang "en"
-} else {
-if {[info exists black(ytitle.$getlang.1)]} {
-	set lang $getlang
-} else {
 	set lang $ytitle(default_lang)
+		} else {
+	set lang $getlang
 		}
-	}
 	return [string tolower $lang]
 }
 
@@ -424,6 +419,15 @@ set ytitle(website) "wWw.TCLScriptS.NeT"
 set ytitle(version) "v2.2"
 
 ###
+proc youtube:percentage {total number} {
+  if {$total > 0} {
+   return [expr $number / [expr $total / 100]];
+  } else {
+    return 0;
+  }
+}
+
+###
 proc youtube:like_bar {like dislike chan} {
 	global ytitle
 	set setcolor [youtube:getcolor $chan]
@@ -434,18 +438,23 @@ if {$setcolor == "1"} {
 	return "\002N/A\002"
 	}
 }
+if {![regexp {%} $like]} {
+		set sum [expr $like + $dislike]
+		set like [youtube:percentage $sum $like]
+		set dislike [youtube:percentage $sum $dislike]
+} else {
 	set like [string map {"%" ""} $like]
 	set dislike [string map {"%" ""} $dislike]
+}
 
 if {$like > $dislike} {
-	set dif [expr ($like - $dislike)]
+	set dif [expr $like - $dislike]
 } else {
-	set dif [expr ($dislike - $like)]
+	set dif [expr $dislike - $like]
 }
 	set like_star "&#9733"
 	set dislike_star "&#9734"
 	set dif [expr {double(round(1000*$dif))/1000.0}]
-
 if {[expr {round($dif / 10)}] > 10} {
 	set red 10
 	set green [expr {10 - $red}]
@@ -515,6 +524,14 @@ set black(ytitle.it.2) "\[\002You\0030,4Tube\003\002\003\] \00310Titolo:\0034 %m
 set black(ytitle.it.3) "\002\[YouTube\]\002 Questo video non esiste."
 set black(ytitle.it.4) "\002\[YouTube\]\002 Titolo:\002 %msg.1%\002 | Caricato da:\002 %msg.2%\002 | Durata:\002 %msg.7%m%msg.8%s\002 | Data:\002 %msg.6%\002 | Visualizzazioni:\002 %msg.3%\002 | Piace: %msg.4% | Collegamento:\002 %msg.10%\002 - \[\002%msg.9%\002\] -"
 set black(ytitle.it.5) "\[\002You\0030,4Tube\003\002\003\] \00310Titolo:\0034 %msg.1% \003| \00310Caricato da:\0034 %msg.2% \003| \00310Durata:\0034 %msg.7%m%msg.8%s\003 | \00310Data:\0034 %msg.6% \003| \00310Visualizzazioni:\0034 %msg.3% \003| \00310Piace:\003 %msg.4% | \00310Collegamento: \0034%msg.10%\003 - \[\00304%msg.9%\003\] -"
+
+# german
+
+set black(ytitle.de.1) "\002\[YouTube\]\002 Titel:\002 %msg.1%\002 | hochgeladen von:\002 %msg.2%\002 | Laenge:\002 %msg.7%m%msg.8%s\002 | Datum:\002 %msg.6%\002 | Aufrufe:\002 %msg.3%\002 | Like: %msg.4% - \[\002%msg.9%\002\] -"
+set black(ytitle.de.2) "\[\002You\0030,4Tube\003\002\003\] \00310Title:\0034 %msg.1% \003| \00310Uploaded by:\0034 %msg.2% \003| \00310Length:\0034 %msg.7%m%msg.8%s\003 | \00310Datum:\0034 %msg.6% \003| \00310Aufrufe:\0034 %msg.3% \003| \00310Like:\003 %msg.4% - \[\00304%msg.9%\003\] -"
+set black(ytitle.de.3) "\002\[YouTube\]\002 Das Video existiert nicht."
+set black(ytitle.de.4) "\002\[YouTube\]\002 Titel:\002 %msg.1%\002 | hochgeladen von:\002 %msg.2%\002 | Laenge:\002 %msg.7%m%msg.8%s\002 | Datum:\002 %msg.6%\002 | Aufrufe:\002 %msg.3%\002 | Like: %msg.4% | Link:\002 %msg.10%\002 - \[\002%msg.9%\002\] -"
+set black(ytitle.de.5) "\[\002You\0030,4Tube\003\002\003\] \00310Titel:\0034 %msg.1% \003| \00310hochgeladen von:\0034 %msg.2% \003| \00310Laenge:\0034 %msg.7%m%msg.8%s\003 | \00310Datum:\0034 %msg.6% \003| \00310Aufrufe:\0034 %msg.3% \003| \00310Like:\003 %msg.4% | \00310Link: \0034%msg.10%\003 - \[\00304%msg.9%\003\] -"
 
 putlog "\002$ytitle(projectName) $ytitle(version)\002 coded by $ytitle(author) ($ytitle(website)): Loaded."
 
