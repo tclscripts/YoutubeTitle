@@ -1,5 +1,5 @@
 ##########################################################################################
-# Youtube Title 2.2
+# Youtube Title 1.9
 # - fetches and displays video information when a YouTube link is posted in channel.
 # - displays title, date and rating of posted video links. 
 # - supports also HTTPS links.
@@ -7,9 +7,6 @@
 # requires: packages http 
 #
 # UPDATES/CHANGES:
-# - (2.2) solved issues related to youtube changes
-# - (2.1) solved issue with youtube live videos
-# - (2.0) now the script access directly Youtube
 # - (1.9) added stars for like display instead of procentages
 # - (1.8) added anti-flood support
 # - (1.8) added youtube search (it will get info from the first youtube video)
