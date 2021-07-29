@@ -20,7 +20,7 @@
 #
 # To activate .chanset #channel +ytitle | BlackTools : .set +ytitle
 #
-# To chose a different language .set ytlang <RO> / <EN> / <FR> / <ES> / <IT>
+# To chose a different language .set ytlang <RO> / <EN> / <FR> / <ES> / <IT> / <TR> 
 # 
 # To change output color .set ytcolor <0/1> (1 - colors ; 0 - no colors)
 #
