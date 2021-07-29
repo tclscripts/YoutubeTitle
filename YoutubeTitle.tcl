@@ -21,7 +21,7 @@
 # To activate - .chanset #channel +ytitle | BlackTools : .set +ytitle
 # To activate Youtube search - .chanset #channel +ytsearch | BlackTools : .set +ytsearch
 #
-# To chose a different language .set ytlang <RO> / <EN> / <FR> / <ES> / <IT>
+# To chose a different language .set ytlang <RO> / <EN> / <FR> / <ES> / <IT> / <TR>
 #
 # To work put the http.tcl, from the archive, in your eggdrop config (if you don't have it instaled)
 #
@@ -39,7 +39,7 @@
 # - to activate the script: .set +ytitle or .chanset #channel +ytitle
 #
 # - to change script language:
-# .set ytlang <ro/en/fr/es/it> or .chanset #channel ytlang <ro/en/fr/es/it>
+# .set ytlang <ro/en/fr/es/it/tr> or .chanset #channel ytlang <ro/en/fr/es/it/tr>
 #
 # - to set script color
 # .set ytcolor <0/1> ; 1 - colors ; 0 - no colors
@@ -393,6 +393,12 @@ set black(ytitle.it.2) "\[\002You\0030,4Tube\003\002\003\] \00310Titolo:\0034 %m
 set black(ytitle.it.3) "\002\[YouTube\]\002 Questo video non esiste."
 set black(ytitle.it.4) "\002\[YouTube\]\002 Titolo:\002 %msg.1%\002 | Caricato da:\002 %msg.2%\002 | Durata:\002 %msg.7%m%msg.8%s\002 | Data:\002 %msg.6%\002 | Visualizzazioni:\002 %msg.3%\002 | Piace: %msg.4% | Collegamento:\002 %msg.10%\002 - \[\002%msg.9%\002\] -"
 set black(ytitle.it.5) "\[\002You\0030,4Tube\003\002\003\] \00310Titolo:\0034 %msg.1% \003| \00310Caricato da:\0034 %msg.2% \003| \00310Durata:\0034 %msg.7%m%msg.8%s\003 | \00310Data:\0034 %msg.6% \003| \00310Visualizzazioni:\0034 %msg.3% \003| \00310Piace:\003 %msg.4% | \00310Collegamento: \0034%msg.10%\003 - \[\00304%msg.9%\003\] -"
+# Turkish
+set black(ytitle.tr.1) "\002\[YouTube\]\002 Başlık:\002 %msg.1%\002 | Yükleyen:\002 %msg.2%\002 | Uzunluk:\002 %msg.7%m%msg.8%s\002 | Tarih:\002 %msg.6%\002 | Görüntülemeler:\002 %msg.3%\002 | Beğeni: %msg.4% - \[\002%msg.9%\002\] -"
+set black(ytitle.tr.2) "\[\002You\0030,4Tube\003\002\003\] \00310Title:\0034 %msg.1% \003| \00310Yükleyen:\0034 %msg.2% \003| \00310Uzunluk:\0034 %msg.7%m%msg.8%s\003 | \00310Tarih:\0034 %msg.6% \003| \00310Görüntülemeler:\0034 %msg.3% \003| \00310Beğeni:\003 %msg.4% - \[\00304%msg.9%\003\] -"
+set black(ytitle.tr.3) "\002\[YouTube\]\002 Bu video mevcut değil."
+set black(ytitle.tr.4) "\002\[YouTube\]\002 Başlık:\002 %msg.1%\002 | Yükleyen:\002 %msg.2%\002 | Uzunluk:\002 %msg.7%m%msg.8%s\002 | Tarih:\002 %msg.6%\002 | Görüntülemeler:\002 %msg.3%\002 | Beğeni: %msg.4% | Link:\002 %msg.10%\002- \[\002%msg.9%\002\] -"
+set black(ytitle.tr.5) "\[\002You\0030,4Tube\003\002\003\] \00310Title:\0034 %msg.1% \003| \00310Yükleyen:\0034 %msg.2% \003| \00310Uzunluk:\0034 %msg.7%m%msg.8%s\003 | \00310Tarih:\0034 %msg.6% \003| \00310Görüntülemeler:\0034 %msg.3% \003| \00310Beğeni:\003 %msg.4% | \00310Link: \0034%msg.10%\003 - \[\00304%msg.9%\003\] -"
 
 putlog "\002$ytitle(projectName) $ytitle(version)\002 coded by $ytitle(author) ($ytitle(website)): Loaded."
 
